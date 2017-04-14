@@ -38,5 +38,5 @@ gulp.task("watch", ()=> {
 	gulp.watch('src/sass/*.scss', ['sass']);
 });
 
-gulp.task('build', ['browserify']);
+gulp.task('build', ['browserify', 'sass']);
 gulp.task('default', ['build', 'watch']);
