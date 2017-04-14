@@ -2,7 +2,7 @@
  * Created by AterStrix on 16.03.2017.
  */
 import gulp from 'gulp';
-import sass from 'node-sass';
+import sass from 'gulp-sass';
 import util from 'gulp-util';
 import browserify from 'browserify';
 import source from 'vinyl-source-stream';
@@ -15,7 +15,7 @@ gulp.task("browserify", ()=> {
 	})
 	.plugin(tsify, {
 		target: 'es5',
-		experimantaDecorators: true
+		experimentalDecorators: true
 	})
 	.bundle()
 	.on("error", function(err) {
@@ -27,7 +27,16 @@ gulp.task("browserify", ()=> {
 	.pipe(gulp.dest('./dist'))
 });
 
+gulp.task('sass', ()=> {
+	return gulp.src('./src/sass/styles.scss')
+		.pipe(sass().on('error', sass.logError))
+		.pipe(gulp.dest('./dist/css'));
+});
+
 gulp.task("watch", ()=> {
 	gulp.watch('src/**/*.ts', ['browserify']);
-	gulp.watch('src/sass/*.scss', ['node-sass']);
+	gulp.watch('src/sass/*.scss', ['sass']);
 });
+
+gulp.task('build', ['browserify']);
+gulp.task('default', ['build', 'watch']);
